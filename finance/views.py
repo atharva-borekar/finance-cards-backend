@@ -173,13 +173,13 @@ def get_top_losers(market="nifty"):
 
         for row in rows[1:]:
             columns = row.find_all('td')
-            company_nme = columns[0].text.strip()
+            company_name = columns[0].text.strip()
             price = columns[1].text.strip()
             change = columns[2].text.strip()
             percentage_change = columns[3].text.strip()
 
             top_losers_data.append({
-                'company_nme': company_nme,
+                'company_name': company_name,
                 'price': price,
                 'change': change,
                 'percentage_change': percentage_change
