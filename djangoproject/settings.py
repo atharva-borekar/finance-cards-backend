@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'notes.apps.NotesConfig',
-    'todos.apps.TodosConfig',
     'finance.apps.FinanceConfig',
     'corsheaders'
 ]

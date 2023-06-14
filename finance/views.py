@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 url = "https://www.moneycontrol.com"
 most_active_bse_url = "https://www.moneycontrol.com/stocks/marketstats/bse-mostactive-stocks/all-companies-97/"
 most_active_nse_url = "https://www.moneycontrol.com/stocks/marketstats/nse-mostactive-stocks/all-companies-99/"
+commodities_url = "https://www.moneycontrol.com/commodity/"
 
 
 def get_soup(url=url):
@@ -189,6 +190,116 @@ def get_top_losers(market="nifty"):
         print("Table not found.")
 
 
+def get_market_commodity_gainers(index="mcx"):
+    soup = get_soup(commodities_url)
+    market_commodity_gainers = {
+        "mcx": [],
+        "ncdex": []
+    }
+    ul = soup.find_all("ul", {"class": "market_stats_list"})
+    if ul is not None:
+        mcx_ul = ul[0]
+        ncdex_ul = ul[1]
+        mcx_list = mcx_ul.find_all("li")
+        if (mcx_list):
+            mcx_top_gainers_ele = mcx_list[0]
+            mcx_top_gainers_table = mcx_top_gainers_ele.find("table")
+            if mcx_top_gainers_table:
+                rows = mcx_top_gainers_table.find_all('tr')
+
+                for row in rows[1:]:
+                    columns = row.find_all('td')
+                    commodity_name = columns[0].text.strip()
+                    price = columns[1].text.strip()
+                    change = columns[2].text.strip()
+                    percentage_change = columns[3].text.strip()
+
+                    market_commodity_gainers["mcx"].append({
+                        'commodity': commodity_name,
+                        'price': price,
+                        'change': change,
+                        'percentage_change': percentage_change
+                    })
+
+        ncdex_list = ncdex_ul.find_all("li")
+        if (ncdex_list):
+            ncdex_top_gainers_ele = ncdex_list[0]
+            ncdex_top_gainers_table = ncdex_top_gainers_ele.find("table")
+            if ncdex_top_gainers_table:
+                rows = ncdex_top_gainers_table.find_all('tr')
+
+                for row in rows[1:]:
+                    columns = row.find_all('td')
+                    commodity_name = columns[0].text.strip()
+                    price = columns[1].text.strip()
+                    change = columns[2].text.strip()
+                    percentage_change = columns[3].text.strip()
+
+                    market_commodity_gainers["ncdex"].append({
+                        'commodity': commodity_name,
+                        'price': price,
+                        'change': change,
+                        'percentage_change': percentage_change
+                    })
+
+    return market_commodity_gainers
+
+
+def get_market_commodity_losers():
+    soup = get_soup(commodities_url)
+    market_commodity_losers = {
+        "mcx": [],
+        "ncdex": []
+    }
+    ul = soup.find_all("ul", {"class": "market_stats_list"})
+    if ul is not None:
+        mcx_ul = ul[0]
+        ncdex_ul = ul[1]
+        mcx_list = mcx_ul.find_all("li")
+        if (mcx_list):
+            mcx_top_losers_ele = mcx_list[1]
+            mcx_top_losers_table = mcx_top_losers_ele.find("table")
+            if mcx_top_losers_table:
+                rows = mcx_top_losers_table.find_all('tr')
+
+                for row in rows[1:]:
+                    columns = row.find_all('td')
+                    commodity_name = columns[0].text.strip()
+                    price = columns[1].text.strip()
+                    change = columns[2].text.strip()
+                    percentage_change = columns[3].text.strip()
+
+                    market_commodity_losers["mcx"].append({
+                        'commodity': commodity_name,
+                        'price': price,
+                        'change': change,
+                        'percentage_change': percentage_change
+                    })
+
+        ncdex_list = ncdex_ul.find_all("li")
+        if (ncdex_list):
+            ncdex_top_losers_ele = ncdex_list[1]
+            ncdex_top_losers_table = ncdex_top_losers_ele.find("table")
+            if ncdex_top_losers_table:
+                rows = ncdex_top_losers_table.find_all('tr')
+
+                for row in rows[1:]:
+                    columns = row.find_all('td')
+                    commodity_name = columns[0].text.strip()
+                    price = columns[1].text.strip()
+                    change = columns[2].text.strip()
+                    percentage_change = columns[3].text.strip()
+
+                    market_commodity_losers["ncdex"].append({
+                        'commodity': commodity_name,
+                        'price': price,
+                        'change': change,
+                        'percentage_change': percentage_change
+                    })
+
+    return market_commodity_losers
+
+
 @api_view(['GET'])
 def mostActive(request):
     market = request.GET["market"]
@@ -253,5 +364,43 @@ def marketAction(request):
             "market_price",
             "market_change",
             "market_percentage_change"
+        ]
+    }})
+
+
+@api_view(['GET'])
+def marketCommodityGainers(request):
+    commodities = get_market_commodity_gainers()
+    return JsonResponse({"data": commodities, "table_config": {
+        "headers": [
+            "Name",
+            "Price",
+            "Change",
+            "% Change"
+        ],
+        "keys": [
+            "commodity",
+            "price",
+            "change",
+            "percentage_change"
+        ]
+    }})
+
+
+@api_view(['GET'])
+def marketCommodityLosers(request):
+    commodities = get_market_commodity_losers()
+    return JsonResponse({"data": commodities, "table_config": {
+        "headers": [
+            "Name",
+            "Price",
+            "Change",
+            "% Change"
+        ],
+        "keys": [
+            "commodity",
+            "price",
+            "change",
+            "percentage_change"
         ]
     }})

@@ -17,22 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from notes.views import NoteViewSet, NotePost
-from notes import urls
-from todos import urls as todoUrls
 from finance import urls as financeUrls
 
 
-notes_router = routers.SimpleRouter()
-notes_router.register(
-    r'notes',
-    NoteViewSet,
-    basename='note'
-)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('notes/', include(urls)),
-    path('todos/', include(todoUrls.urlpatterns)),
     path('finance/', include(financeUrls.urlpatterns))
 ]
