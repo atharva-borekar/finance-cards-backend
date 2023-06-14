@@ -33,14 +33,11 @@ def get_most_active(market="nse"):
                 stock_name = columns[0].text.strip()
                 stock_price = columns[1].text.strip()
                 stock_change = columns[2].text.strip()
-                print(stock_name, stock_price, stock_change)
                 stock_data.append({
                     'stock_name': stock_name,
                     'stock_price': stock_price,
                     'stock_change': stock_change
                 })
-        else:
-            print("Table not found.")
 
     return stock_data
 
@@ -66,8 +63,6 @@ def get_market_action():
                 'market_percentage_change': market_percentage_change
             })
         return market_action_data
-    else:
-        print("Table not found.")
 
 
 def get_most_active_bse_stocks():
@@ -100,8 +95,6 @@ def get_most_active_bse_stocks():
                     'value': value
                 })
         return bse_most_active_data
-    else:
-        print("Table not found.")
 
 
 def get_most_active_nse_stocks():
@@ -132,8 +125,6 @@ def get_most_active_nse_stocks():
                     'value': value
                 })
         return nse_most_active_data
-    else:
-        print("Table not found.")
 
 
 def get_top_gainers(market="nifty"):
@@ -159,8 +150,6 @@ def get_top_gainers(market="nifty"):
                 'percentage_change': percentage_change
             })
         return top_gainers_data
-    else:
-        print("Table not found.")
 
 
 def get_top_losers(market="nifty"):
@@ -186,8 +175,6 @@ def get_top_losers(market="nifty"):
                 'percentage_change': percentage_change
             })
         return top_losers_data
-    else:
-        print("Table not found.")
 
 
 def get_market_commodity_gainers(index="mcx"):
@@ -304,7 +291,6 @@ def get_market_commodity_losers():
 def mostActive(request):
     market = request.GET["market"]
     most_active = get_most_active(market=market)
-    print("most_active", most_active)
     return JsonResponse({"data": most_active})
 
 
@@ -351,7 +337,6 @@ def topLosers(request):
 @api_view(['GET'])
 def marketAction(request):
     marketAction = get_market_action()
-    print(marketAction)
     return JsonResponse({"data": marketAction, "table_config": {
         "headers": [
             "Name",

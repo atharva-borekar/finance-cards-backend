@@ -84,14 +84,6 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_test',
-        'USER': 'myprojectuser',
-        'PASSWORD': 'abcd1234',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
 }
 
 
